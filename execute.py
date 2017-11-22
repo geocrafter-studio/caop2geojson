@@ -19,13 +19,13 @@ __version__ = "0.1.0"
 
 def execute(args):
     caop = CAOP2GeoJSON()
-    caop.src_file=args.source
-    caop.src_epsg=args.s_srs
-    caop.src_format=args.s_format
-    caop.dest_file=args.output
-    caop.dest_epsg=args.o_srs
-    caop.dest_format=args.o_format
-    caop.overwrite=args.overwrite
+    caop.src_file = args.source
+    caop.src_epsg = args.s_srs
+    caop.src_format = args.s_format
+    caop.dest_file = args.output
+    caop.dest_epsg = args.o_srs
+    caop.dest_format = args.o_format
+    caop.overwrite = args.overwrite
 
     source = caop.read()
 

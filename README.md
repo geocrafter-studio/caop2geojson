@@ -1,6 +1,6 @@
 # CAOP exporter (caop2geojson)
 
-Small Python utility for exporting Portuguese [CAOP]('http://www.dgterritorio.pt/cartografia_e_geodesia/cartografia/carta_administrativa_oficial_de_portugal__caop_/caop_em_vigor/').
+Small Python utility for exporting Portuguese [CAOP](http://www.dgterritorio.pt/cartografia_e_geodesia/cartografia/carta_administrativa_oficial_de_portugal__caop_/caop_em_vigor/).
 
 ## Install
 Setup a virtual environment and install dependencies
@@ -54,10 +54,16 @@ options:
   --overwrite           Overwrite existing files on export.
 ```
 
+## Supported Formats
+
+Despite it's initial purpose and naming, the tool was tested to export `GeoJSON` and `ESRI Shapefile` formats.
+Since it's using [Fiona](https://github.com/Toblerity/Fiona) in the background, the supported driver's list for export will depend on the [OGR](http://www.gdal.org/ogr_formats.html) installation on your system.
+For further info check [Fiona](http://toblerity.org/fiona/manual.html) and [OGR](https://trac.osgeo.org/gdal/) documentation.
+
 ## Contact
 
 If you need further assistance please contact [info[at]geocrafter.eu](info@geocrafter.eu)
 
 ## License
 
-caop2geojson is Free and Open Source sofware and is licensed under the Simplified BSD License.
+caop2geojson is Free and Open Source sofware and is licensed under 3-clause BSD License.

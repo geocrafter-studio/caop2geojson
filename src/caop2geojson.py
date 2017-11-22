@@ -11,7 +11,7 @@ info@geocrafter.eu
 
 import fiona
 from pyproj import Proj, transform
-from os import path, remove
+from os import path
 from sys import stdout
 
 from utils import mkgroupdir, progressbar, removefile
@@ -63,7 +63,7 @@ class CAOP2GeoJSON(object):
 
     def export_file(self, source, target, schema, pbar, group=False, feature=None, dicolist=None):
         if self.overwrite:
-            remove(target)
+            removefile(target)
         with fiona.open(path=target, mode='w', schema=schema, driver=self.dest_format,
                         crs=self.dest_epsg, encoding='UTF-8') as output:
             if group:
