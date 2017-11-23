@@ -49,19 +49,21 @@ class CAOP2GeoJSON(object):
         if self.dest_format == 'GeoJSON':
             self.ext = '.geojson'
         dico = []
+        dico_field = self.get_dico_field(schema=schema)
         for ft in source:
-            if ft['properties']['Dicofre'] not in dico:
-                d = ft['properties']['Dicofre'][0:2]
-                f = ft['properties']['Dicofre']
+            if ft['properties'][dico_field] not in dico:
+                d = ft['properties'][dico_field][0:2]
+                f = ft['properties'][dico_field]
                 mkgroupdir(destination, d)
-                self.export_file(source=source, target=path.join(destination, d, f + self.ext), schema=schema,
-                                 pbar=pbar, group=True, feature=ft, dicolist=dico)
+                self.export_file(source=None, target=path.join(destination, d, f + self.ext), schema=schema,
+                                 pbar=pbar, group=True, feature=ft, dicolist=dico, diconame=dico_field)
                 dico.append(f)
+        source.close()
         pbar.close()
         stdout.flush()
         print "Successfully exported %s feature(s)!" % pbar.total
 
-    def export_file(self, source, target, schema, pbar, group=False, feature=None, dicolist=None):
+    def export_file(self, source, target, schema, pbar, group=False, feature=None, dicolist=None, diconame=None):
         if self.overwrite:
             removefile(target)
         with fiona.open(path=target, mode='w', schema=schema, driver=self.dest_format,
@@ -70,8 +72,8 @@ class CAOP2GeoJSON(object):
                 source = self.read()
             for ft in source:
                 if group:
-                    if ft['properties']['Dicofre'] not in dicolist:
-                        if ft['properties']['Dicofre'] == feature['properties']['Dicofre']:
+                    if ft['properties'][diconame] not in dicolist:
+                        if ft['properties'][diconame] == feature['properties'][diconame]:
                             tf = self.transform_feature(feature=ft, orig_proj=self.src_proj, dest_proj=self.dest_proj)
                             output.write(tf)
                             pbar.update()
@@ -79,6 +81,8 @@ class CAOP2GeoJSON(object):
                     tf = self.transform_feature(feature=ft, orig_proj=self.src_proj, dest_proj=self.dest_proj)
                     output.write(tf)
                     pbar.update()
+            if group:
+                source.close()
 
     @staticmethod
     def transform_feature(feature, orig_proj, dest_proj):
@@ -89,3 +93,11 @@ class CAOP2GeoJSON(object):
             out_lr.append((proj_x, proj_y))
         feature['geometry']['coordinates'] = [out_lr]
         return feature
+
+    @staticmethod
+    def get_dico_field(schema):
+        try:
+            schema['properties']['Dicofre']
+            return 'Dicofre'
+        except KeyError:
+            return 'DICOFRE'
